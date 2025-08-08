@@ -1,0 +1,28 @@
+{
+  "greetings": {
+    "hello": "Hi there! How can I help you today?",
+    "hi": "Hello! How's it going?",
+    "yoo": "Wassup! Need help with anything?"
+  },
+  "identity": {
+    "who are you": "I'm NovaBot, your study buddy.",
+    "what is your name": "NovaBot at your service!"
+  },
+  "farewell": {
+    "bye": "Goodbye! Study well and stay curious!",
+    "see you": "See you soon! Keep learning!"
+  },
+  "music": {
+    "sing": "🎵 Number 1 party anthem... the look of love, the rush of blood... 🎶"
+  },
+  "deep_thoughts": {
+    "what if": "What if... you took the leap and never looked back?"
+  },
+  "inappropriate": {
+    "fuck": "Let’s keep this respectful, okay?"
+  },
+  "default": {
+    "help": "Try asking about greetings, identity, music, or type 'bye' to exit.",
+    "unknown": "Sorry, I didn't catch that. Type 'help' to see what I can answer."
+  }
+}

@@ -1,0 +1,67 @@
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+public class BimoEngine {
+    private final Map<String, Map<String, String>> knowledge = new HashMap<>();
+
+    public BimoEngine(String jsonFilePath) {
+        loadResponses(jsonFilePath);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void loadResponses(String path) {
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(path));
+
+            for (Object categoryKeyObj : jsonObject.keySet()) {
+                String categoryKey = categoryKeyObj.toString();
+
+                Map<String, String> catMap = new HashMap<>();
+                JSONObject entries = (JSONObject) jsonObject.get(categoryKey);
+
+                for (Object keyObj : entries.keySet()) {
+                    String key = keyObj.toString();
+                    String value = entries.get(key).toString();
+                    catMap.put(key, value);
+                }
+
+                knowledge.put(categoryKey, catMap);
+            }
+
+        } catch (IOException | ParseException e) {
+            System.err.println("Failed to load JSON: " + e.getMessage());
+        }
+    }
+
+    public String getResponse(String input) {
+        String normalized = input.toLowerCase().trim();
+
+        for (Map.Entry<String, Map<String, String>> category : knowledge.entrySet()) {
+            for (Map.Entry<String, String> entry : category.getValue().entrySet()) {
+                if (normalized.contains(entry.getKey())) {
+                    return entry.getValue();
+                }
+            }
+        }
+
+        return knowledge.getOrDefault("default", new HashMap<>())
+                .getOrDefault("unknown", "I'm not sure how to respond.");
+    }
+
+    public void logInput(String userInput) {
+        try (FileWriter fw = new FileWriter("user_logs.txt", true)) {
+            fw.write("User: " + userInput + "\n");
+        } catch (IOException e) {
+            System.err.println("Logging failed: " + e.getMessage());
+        }
+    }
+}
+
